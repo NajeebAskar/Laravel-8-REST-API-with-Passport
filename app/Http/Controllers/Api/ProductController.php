@@ -15,22 +15,19 @@ class ProductController extends BaseApiController
 
     public function index()
     {
-        $products = Product::with('user:id,name')
-            ->get();
+        $products = Product::with('user:id,name')->get();
 
         return response()->json(['products' => $products]);
 
     }
 
-
-    public function store(ProductStoreRequest $request)
+    public function store(ProductStoreRequest $request): \Illuminate\Http\JsonResponse
     {
         $product = new Product;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
         auth()->user()->products()->save($product);
-
         return $this->sendResponse($product, 'Product created successfully.');
 
     }
